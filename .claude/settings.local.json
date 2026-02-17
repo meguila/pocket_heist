@@ -1,10 +1,10 @@
 {
   "permissions": {
     "allow": [
-      "bash(git init)",
+      "Bash(Git init)",
       "WebSearch",
-      "bash(git switch)",
-      "bash(goi switch:*)"
+      "Bash(Git switch)",
+      "Bash(Git switch:*)"
     ]
   }
 }
