@@ -13,7 +13,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo \"file edited\""
+            "command": "powershell -NoProfile -Command \"Add-Content -Path tool-use.json -Value ('// ' + (Get-Date -Format 'yyyy-MM-dd HH:mm:ss')); $json = $input | ConvertFrom-Json; $json.tool_input | ConvertTo-Json | Add-Content -Path tool-use.json -Encoding UTF8; Add-Content -Path tool-use.json -Value ''\""
           }
         ]
       }

@@ -1,0 +1,8 @@
+// 2026-02-18 10:30:37
+{
+    "file_path":  "C:\\Develop\\01_Devs\\05_Sandbox\\pocket_heist\\app\\(public)\\login\\page.tsx",
+    "old_string":  "        \u003ch2 className=\"form-title\"\u003eLog in to Your Account\u003c/h2\u003e",
+    "new_string":  "        \u003ch1 className=\"form-title\"\u003eLog in to Your Account\u003c/h1\u003e",
+    "replace_all":  false
+}
+
