@@ -3,8 +3,20 @@
     "allow": [
       "Bash(Git init)",
       "WebSearch",
-      "Bash(Git switch)",
       "Bash(Git switch:*)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"file edited\""
+          }
+        ]
+      }
     ]
   }
 }
