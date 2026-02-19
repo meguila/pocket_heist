@@ -4,7 +4,8 @@
       "Bash(Git init)",
       "WebSearch",
       "Bash(Git switch:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(npx vitest:*)"
     ]
   },
   "hooks": {
