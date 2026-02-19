@@ -22,9 +22,13 @@ npx vitest run tests/components/Navbar.test.tsx  # Run a single test file
 
 The root `app/layout.tsx` only provides global metadata and imports `globals.css`. All structural layout lives in the group layouts.
 
+The root `/` page (`app/(public)/page.tsx`) is a splash/routing page — its intent is to redirect authenticated users to `/heists` and unauthenticated users to `/login`.
+
 **Path alias:** `@/*` maps to the project root. Always use `@/` for imports (e.g. `@/components/Navbar`).
 
 **Components** live in `components/<ComponentName>/` with three files: the component, a `.module.css`, and an `index.ts` barrel export.
+
+**Icons:** Use `lucide-react` (already a dependency) for any icons needed.
 
 ## Styling
 
@@ -42,8 +46,9 @@ Global utility classes defined in `globals.css`:
 - `.page-content` — centered container with max-width
 - `.center-content` — full-height vertical centering
 - `.form-title` — centered bold form heading
+- `.btn` — primary action button (purple bg, dark text, hover opacity)
 
-Component-specific styles go in `.module.css` files, not inline Tailwind classes.
+Component-specific styles go in `.module.css` files, not inline Tailwind classes. Each `.module.css` must start with `@reference "../../app/globals.css"` so that `@apply` can resolve custom design tokens.
 
 ## Testing Setup
 
@@ -58,3 +63,7 @@ Component-specific styles go in `.module.css` files, not inline Tailwind classes
 - Do NOT apply tailwind classes directly in component templates unless essential or just 1 at most. If an element needs more than a single tailwind class, combine them into a custom class using the `@apply` directive.
 - Use minimal project dependencies where possible.
 - Use the `git switch -c` command to switch to new branches, not `git checkout`.
+
+## Checking Documentation
+
+- **important:** When implementing any lib/framework-specific features, ALWAYS check the appropiate lib/framework documentation using the Context7 MCP server before writing any code.
