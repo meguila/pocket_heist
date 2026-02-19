@@ -3,7 +3,8 @@
     "allow": [
       "Bash(Git init)",
       "WebSearch",
-      "Bash(Git switch:*)"
+      "Bash(Git switch:*)",
+      "Bash(ls:*)"
     ]
   },
   "hooks": {
