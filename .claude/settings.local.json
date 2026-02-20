@@ -5,7 +5,13 @@
       "WebSearch",
       "Bash(Git switch:*)",
       "Bash(ls:*)",
-      "Bash(npx vitest:*)"
+      "Bash(npx vitest:*)",
+      "mcp__firebase__firebase_get_environment",
+      "mcp__firebase__firebase_login",
+      "mcp__firebase__firebase_create_project",
+      "mcp__firebase__firebase_list_projects",
+      "mcp__firebase__firebase_update_environment",
+      "mcp__firebase__firebase_create_app"
     ]
   },
   "hooks": {
