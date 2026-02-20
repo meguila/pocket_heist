@@ -11,7 +11,12 @@
       "mcp__firebase__firebase_create_project",
       "mcp__firebase__firebase_list_projects",
       "mcp__firebase__firebase_update_environment",
-      "mcp__firebase__firebase_create_app"
+      "mcp__firebase__firebase_create_app",
+      "Bash(powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"C:/Users/LENOVO/fix-firebase-mcp.ps1\")",
+      "Bash(powershell.exe -NoProfile -Command \"Select-String -Path ''C:/Users/LENOVO/.claude.json'' -Pattern ''firebase-tools'' -Context 4,0\")",
+      "Bash(powershell.exe -NoProfile -Command \"Select-String -Path ''C:/Users/LENOVO/.claude.json'' -Pattern ''\"\"command\"\"'' -Context 0,0\")",
+      "Bash(Select-String \"firebase\" -NotMatch)",
+      "Bash(Select-Object -First 5)"
     ]
   },
   "hooks": {
