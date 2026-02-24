@@ -1,18 +1,48 @@
 'use client'
 
 import { useState } from "react"
+import { signInWithEmailAndPassword } from "firebase/auth"
 import Link from "next/link"
+import { auth } from "@/lib/firebase"
 import styles from "./LoginForm.module.css"
+
+function mapFirebaseError(code: string | undefined): string {
+  switch (code) {
+    case "auth/user-not-found":
+    case "auth/wrong-password":
+    case "auth/invalid-credential":
+      return "Invalid email or password."
+    case "auth/invalid-email":
+      return "Please enter a valid email address."
+    default:
+      return "Something went wrong. Please try again."
+  }
+}
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState(false)
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     const form = e.currentTarget
     const email = (form.elements.namedItem("email") as HTMLInputElement).value
     const password = (form.elements.namedItem("password") as HTMLInputElement).value
-    console.log({ email, password })
+
+    setError(null)
+    setIsLoading(true)
+
+    try {
+      await signInWithEmailAndPassword(auth, email, password)
+      setSuccess(true)
+    } catch (err) {
+      const code = (err as { code?: string }).code
+      setError(mapFirebaseError(code))
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -25,6 +55,7 @@ export default function LoginForm() {
           type="email"
           required
           autoComplete="email"
+          onChange={() => setError(null)}
         />
       </div>
       <div className={styles.field}>
@@ -36,6 +67,7 @@ export default function LoginForm() {
             type={showPassword ? "text" : "password"}
             required
             autoComplete="current-password"
+            onChange={() => setError(null)}
           />
           <button
             type="button"
@@ -57,7 +89,11 @@ export default function LoginForm() {
           </button>
         </div>
       </div>
-      <button type="submit" className="btn">Login</button>
+      {error && <p role="alert" className={styles.errorMessage}>{error}</p>}
+      {success && <p role="status" className={styles.successMessage}>You&apos;re logged in!</p>}
+      <button type="submit" className="btn" disabled={isLoading}>
+        {isLoading ? "Logging in…" : "Login"}
+      </button>
       <p className={styles.switchLink}>
         Don&apos;t have an account? <Link href="/signup">Sign up</Link>
       </p>

@@ -1,8 +1,23 @@
-import { render, screen } from "@testing-library/react"
+import { render, screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
+import { vi } from "vitest"
 import LoginForm from "@/components/LoginForm"
 
+vi.mock("firebase/auth", () => ({
+  signInWithEmailAndPassword: vi.fn(),
+}))
+
+vi.mock("@/lib/firebase", () => ({
+  auth: {},
+}))
+
+import { signInWithEmailAndPassword } from "firebase/auth"
+
 describe("LoginForm", () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+  })
+
   it("renders email and password fields", () => {
     render(<LoginForm />)
     expect(screen.getByLabelText("Email")).toBeInTheDocument()
@@ -33,17 +48,64 @@ describe("LoginForm", () => {
     expect(input).toHaveAttribute("type", "password")
   })
 
-  it("calls console.log with email and password on submit", async () => {
+  it("does not display an error on clean render", () => {
+    render(<LoginForm />)
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument()
+  })
+
+  it("disables the submit button and shows loading text while the request is in flight", async () => {
     const user = userEvent.setup()
-    const spy = vi.spyOn(console, "log").mockImplementation(() => {})
+    vi.mocked(signInWithEmailAndPassword).mockReturnValue(new Promise(() => {}))
     render(<LoginForm />)
 
     await user.type(screen.getByLabelText("Email"), "test@example.com")
     await user.type(screen.getByLabelText("Password"), "secret123")
     await user.click(screen.getByRole("button", { name: /^login$/i }))
 
-    expect(spy).toHaveBeenCalledWith({ email: "test@example.com", password: "secret123" })
-    spy.mockRestore()
+    const btn = screen.getByRole("button", { name: /logging in/i })
+    expect(btn).toBeDisabled()
+  })
+
+  it("shows the success message when signInWithEmailAndPassword resolves", async () => {
+    const user = userEvent.setup()
+    vi.mocked(signInWithEmailAndPassword).mockResolvedValue({} as never)
+    render(<LoginForm />)
+
+    await user.type(screen.getByLabelText("Email"), "test@example.com")
+    await user.type(screen.getByLabelText("Password"), "secret123")
+    await user.click(screen.getByRole("button", { name: /^login$/i }))
+
+    await waitFor(() => {
+      expect(screen.getByRole("status")).toHaveTextContent("You're logged in!")
+    })
+  })
+
+  it("shows an inline error when Firebase rejects with invalid credentials", async () => {
+    const user = userEvent.setup()
+    vi.mocked(signInWithEmailAndPassword).mockRejectedValue({ code: "auth/invalid-credential" })
+    render(<LoginForm />)
+
+    await user.type(screen.getByLabelText("Email"), "test@example.com")
+    await user.type(screen.getByLabelText("Password"), "wrongpassword")
+    await user.click(screen.getByRole("button", { name: /^login$/i }))
+
+    await waitFor(() => {
+      expect(screen.getByRole("alert")).toHaveTextContent("Invalid email or password.")
+    })
+  })
+
+  it("shows a fallback error message for unexpected Firebase errors", async () => {
+    const user = userEvent.setup()
+    vi.mocked(signInWithEmailAndPassword).mockRejectedValue({})
+    render(<LoginForm />)
+
+    await user.type(screen.getByLabelText("Email"), "test@example.com")
+    await user.type(screen.getByLabelText("Password"), "secret123")
+    await user.click(screen.getByRole("button", { name: /^login$/i }))
+
+    await waitFor(() => {
+      expect(screen.getByRole("alert")).toHaveTextContent("Something went wrong. Please try again.")
+    })
   })
 
   it("renders a link to /signup", () => {

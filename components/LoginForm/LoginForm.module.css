@@ -57,3 +57,11 @@
 .switchLink a:hover {
   text-decoration: underline;
 }
+
+.errorMessage {
+  @apply text-sm text-error text-center;
+}
+
+.successMessage {
+  @apply text-sm text-success text-center;
+}
