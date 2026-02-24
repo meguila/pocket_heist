@@ -1,8 +1,39 @@
-import { render, screen } from "@testing-library/react"
+import { render, screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
+import { vi } from "vitest"
 import SignupForm from "@/components/SignupForm"
 
+vi.mock("firebase/auth", () => ({
+  createUserWithEmailAndPassword: vi.fn(),
+  updateProfile: vi.fn(),
+}))
+
+vi.mock("firebase/firestore", () => ({
+  doc: vi.fn(),
+  setDoc: vi.fn(),
+}))
+
+vi.mock("@/lib/firebase", () => ({
+  auth: {},
+  db: {},
+}))
+
+vi.mock("@/lib/codename", () => ({
+  generateCodename: vi.fn(() => "SilentFoxRogue"),
+}))
+
+vi.mock("next/navigation", () => ({
+  useRouter: vi.fn(() => ({ push: vi.fn() })),
+}))
+
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth"
+import { setDoc } from "firebase/firestore"
+
 describe("SignupForm", () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+  })
+
   it("renders email and password fields", () => {
     render(<SignupForm />)
     expect(screen.getByLabelText("Email")).toBeInTheDocument()
@@ -33,17 +64,36 @@ describe("SignupForm", () => {
     expect(input).toHaveAttribute("type", "password")
   })
 
-  it("calls console.log with email and password on submit", async () => {
+  it("does not display an error on clean render", () => {
+    render(<SignupForm />)
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument()
+  })
+
+  it("disables the submit button and shows loading text while the request is in flight", async () => {
     const user = userEvent.setup()
-    const spy = vi.spyOn(console, "log").mockImplementation(() => {})
+    vi.mocked(createUserWithEmailAndPassword).mockReturnValue(new Promise(() => {}))
     render(<SignupForm />)
 
     await user.type(screen.getByLabelText("Email"), "new@example.com")
-    await user.type(screen.getByLabelText("Password"), "newpass456")
+    await user.type(screen.getByLabelText("Password"), "password123")
     await user.click(screen.getByRole("button", { name: /^sign up$/i }))
 
-    expect(spy).toHaveBeenCalledWith({ email: "new@example.com", password: "newpass456" })
-    spy.mockRestore()
+    const btn = screen.getByRole("button", { name: /creating account/i })
+    expect(btn).toBeDisabled()
+  })
+
+  it("displays an inline error when Firebase returns an auth error", async () => {
+    const user = userEvent.setup()
+    vi.mocked(createUserWithEmailAndPassword).mockRejectedValue({ code: "auth/email-already-in-use" })
+    render(<SignupForm />)
+
+    await user.type(screen.getByLabelText("Email"), "taken@example.com")
+    await user.type(screen.getByLabelText("Password"), "password123")
+    await user.click(screen.getByRole("button", { name: /^sign up$/i }))
+
+    await waitFor(() => {
+      expect(screen.getByRole("alert")).toHaveTextContent("An account with this email already exists.")
+    })
   })
 
   it("renders a link to /login", () => {

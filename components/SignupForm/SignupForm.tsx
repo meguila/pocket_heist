@@ -2,17 +2,53 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth"
+import { doc, setDoc } from "firebase/firestore"
+import { auth, db } from "@/lib/firebase"
+import { generateCodename } from "@/lib/codename"
 import styles from "./SignupForm.module.css"
+
+function mapFirebaseError(code: string | undefined): string {
+  switch (code) {
+    case "auth/email-already-in-use":
+      return "An account with this email already exists."
+    case "auth/weak-password":
+      return "Password must be at least 6 characters."
+    case "auth/invalid-email":
+      return "Please enter a valid email address."
+    default:
+      return "Something went wrong. Please try again."
+  }
+}
 
 export default function SignupForm() {
   const [showPassword, setShowPassword] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const router = useRouter()
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     const form = e.currentTarget
     const email = (form.elements.namedItem("email") as HTMLInputElement).value
     const password = (form.elements.namedItem("password") as HTMLInputElement).value
-    console.log({ email, password })
+
+    setError(null)
+    setIsLoading(true)
+
+    try {
+      const { user } = await createUserWithEmailAndPassword(auth, email, password)
+      const codename = generateCodename()
+      await updateProfile(user, { displayName: codename })
+      await setDoc(doc(db, "users", user.uid), { id: user.uid, codename })
+      router.push("/heists")
+    } catch (err) {
+      const code = (err as { code?: string }).code
+      setError(mapFirebaseError(code))
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -25,6 +61,7 @@ export default function SignupForm() {
           type="email"
           required
           autoComplete="email"
+          onChange={() => setError(null)}
         />
       </div>
       <div className={styles.field}>
@@ -36,6 +73,7 @@ export default function SignupForm() {
             type={showPassword ? "text" : "password"}
             required
             autoComplete="new-password"
+            onChange={() => setError(null)}
           />
           <button
             type="button"
@@ -57,7 +95,12 @@ export default function SignupForm() {
           </button>
         </div>
       </div>
-      <button type="submit" className="btn">Sign Up</button>
+      {error && (
+        <p role="alert" className={styles.errorMessage}>{error}</p>
+      )}
+      <button type="submit" className="btn" disabled={isLoading}>
+        {isLoading ? "Creating account…" : "Sign Up"}
+      </button>
       <p className={styles.switchLink}>
         Already have an account? <Link href="/login">Log in</Link>
       </p>
