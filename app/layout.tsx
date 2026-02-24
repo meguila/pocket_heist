@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import "@/app/globals.css"
+import { AuthProvider } from "@/context/AuthContext"
 
 export const metadata: Metadata = {
   title: "Pocket Heist",
@@ -13,8 +14,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
-        {children}
+      <body suppressHydrationWarning>
+        <AuthProvider>
+          {children}
+        </AuthProvider>
       </body>
     </html>
   )
