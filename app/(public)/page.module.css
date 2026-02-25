@@ -1,0 +1,331 @@
+@reference "../../app/globals.css";
+
+/* ─── Scene / background ─────────────────────────────────────────── */
+
+.scene {
+  position: relative;
+  min-height: 100lvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background-color: var(--color-dark);
+}
+
+/* Radial "vault glow" from center */
+.scene::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 55% at 50% 52%,
+      rgba(194, 122, 255, 0.07) 0%,
+      rgba(251, 100, 182, 0.04) 40%,
+      transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Subtle noise grain overlay */
+.scene::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.6;
+}
+
+/* ─── Geometric vault ring ────────────────────────────────────────── */
+
+.vaultRing {
+  position: absolute;
+  width: min(680px, 92vw);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 1px solid rgba(194, 122, 255, 0.08);
+  box-shadow:
+    0 0 0 24px rgba(194, 122, 255, 0.03),
+    0 0 0 60px rgba(194, 122, 255, 0.015),
+    0 0 0 120px rgba(194, 122, 255, 0.006);
+  z-index: 0;
+  animation: ringPulse 8s ease-in-out infinite;
+}
+
+.vaultRing::before {
+  content: '';
+  position: absolute;
+  inset: 18px;
+  border-radius: 50%;
+  border: 1px solid rgba(251, 100, 182, 0.06);
+}
+
+.vaultRing::after {
+  content: '';
+  position: absolute;
+  inset: 40px;
+  border-radius: 50%;
+  border: 1px dashed rgba(194, 122, 255, 0.05);
+}
+
+@keyframes ringPulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50%       { opacity: 1;   transform: scale(1.015); }
+}
+
+/* Tick marks around the ring (clock face) */
+.ticks {
+  position: absolute;
+  width: min(680px, 92vw);
+  aspect-ratio: 1;
+  z-index: 0;
+}
+
+.tick {
+  position: absolute;
+  width: 1px;
+  height: 10px;
+  background: rgba(194, 122, 255, 0.18);
+  top: 0;
+  left: 50%;
+  transform-origin: 0 min(340px, 46vw);
+}
+
+.tick:nth-child(3n) {
+  height: 16px;
+  background: rgba(194, 122, 255, 0.32);
+  width: 1.5px;
+}
+
+/* ─── Content container ───────────────────────────────────────────── */
+
+.content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2rem 1.5rem;
+  max-width: 680px;
+  width: 100%;
+  gap: 0;
+}
+
+/* ─── Eyebrow / kicker line ──────────────────────────────────────── */
+
+.eyebrow {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--color-secondary);
+  margin-bottom: 1.75rem;
+  opacity: 0;
+  animation: fadeSlideUp 0.6s ease forwards;
+  animation-delay: 0.1s;
+}
+
+/* ─── Logo / wordmark ────────────────────────────────────────────── */
+
+.logoMark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  font-size: clamp(3rem, 10vw, 5.5rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--color-heading);
+  margin-bottom: 0.15em;
+  opacity: 0;
+  animation: fadeSlideUp 0.7s ease forwards;
+  animation-delay: 0.25s;
+}
+
+.logoMark svg {
+  width: 0.75em;
+  height: 0.75em;
+  flex-shrink: 0;
+  color: var(--color-primary);
+  filter: drop-shadow(0 0 12px rgba(194, 122, 255, 0.55));
+  animation: clockGlow 3s ease-in-out infinite;
+  animation-delay: 1.2s;
+}
+
+@keyframes clockGlow {
+  0%, 100% { filter: drop-shadow(0 0 10px rgba(194, 122, 255, 0.5)); }
+  50%       { filter: drop-shadow(0 0 22px rgba(194, 122, 255, 0.85)); }
+}
+
+/* ─── Tagline ─────────────────────────────────────────────────────── */
+
+.tagline {
+  font-size: clamp(0.95rem, 2.2vw, 1.05rem);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  color: var(--color-body);
+  margin-bottom: 2.5rem;
+  opacity: 0;
+  animation: fadeSlideUp 0.7s ease forwards;
+  animation-delay: 0.42s;
+}
+
+.tagline strong {
+  color: var(--color-heading);
+  font-weight: 600;
+}
+
+/* ─── Divider rule ────────────────────────────────────────────────── */
+
+.rule {
+  width: 48px;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent,
+    var(--color-primary),
+    var(--color-secondary),
+    transparent);
+  margin: 0 auto 2.5rem;
+  opacity: 0;
+  animation: fadeIn 0.6s ease forwards;
+  animation-delay: 0.58s;
+}
+
+/* ─── Body copy ──────────────────────────────────────────────────── */
+
+.body {
+  font-size: clamp(0.875rem, 1.8vw, 0.95rem);
+  line-height: 1.75;
+  color: var(--color-body);
+  max-width: 480px;
+  margin: 0 auto 2rem;
+  opacity: 0;
+  animation: fadeSlideUp 0.7s ease forwards;
+  animation-delay: 0.7s;
+}
+
+/* ─── CTA cluster ─────────────────────────────────────────────────── */
+
+.cta {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  opacity: 0;
+  animation: fadeSlideUp 0.7s ease forwards;
+  animation-delay: 0.88s;
+}
+
+.ctaPrimary {
+  @apply px-6 py-2 rounded-md font-semibold text-sm bg-primary text-dark transition-opacity hover:opacity-80;
+  font-size: 0.875rem;
+  letter-spacing: 0.04em;
+  padding: 0.65rem 1.75rem;
+  border-radius: 6px;
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px rgba(194, 122, 255, 0.3),
+    0 4px 24px rgba(194, 122, 255, 0.2);
+  transition: opacity 0.2s, box-shadow 0.2s, transform 0.15s;
+}
+
+.ctaPrimary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg,
+    rgba(255,255,255,0.12) 0%,
+    transparent 60%);
+  pointer-events: none;
+}
+
+.ctaPrimary:hover {
+  opacity: 1;
+  box-shadow:
+    0 0 0 1px rgba(194, 122, 255, 0.5),
+    0 6px 32px rgba(194, 122, 255, 0.35);
+  transform: translateY(-1px);
+}
+
+.ctaSecondary {
+  font-size: 0.875rem;
+  color: var(--color-body);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  transition: color 0.2s;
+  position: relative;
+}
+
+.ctaSecondary::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--color-primary);
+  transition: width 0.25s ease;
+}
+
+.ctaSecondary:hover {
+  color: var(--color-heading);
+}
+
+.ctaSecondary:hover::after {
+  width: 100%;
+}
+
+/* ─── Feature chips ──────────────────────────────────────────────── */
+
+.chips {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 3rem;
+  opacity: 0;
+  animation: fadeIn 0.6s ease forwards;
+  animation-delay: 1.05s;
+}
+
+.chip {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-body);
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 100px;
+  padding: 0.3rem 0.85rem;
+}
+
+.chip svg {
+  width: 0.85em;
+  height: 0.85em;
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+/* ─── Keyframes ───────────────────────────────────────────────────── */
+
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
