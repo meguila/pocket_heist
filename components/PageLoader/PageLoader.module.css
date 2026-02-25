@@ -1,0 +1,15 @@
+@reference "../../app/globals.css";
+
+.loader {
+  @apply flex flex-col justify-center items-center min-h-lvh;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.spinner {
+  color: var(--color-primary);
+  animation: spin 2s linear infinite;
+}
