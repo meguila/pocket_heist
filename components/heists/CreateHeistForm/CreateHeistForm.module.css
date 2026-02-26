@@ -1,0 +1,44 @@
+@reference "../../../app/globals.css";
+
+.form {
+  @apply flex flex-col gap-4 mt-6 mx-auto;
+  max-width: 32rem;
+}
+
+.field {
+  @apply flex flex-col gap-1;
+}
+
+.field label {
+  @apply text-sm font-medium text-heading;
+}
+
+.field input,
+.field textarea,
+.field select {
+  @apply bg-lighter border border-body rounded-md px-3 py-2 text-heading text-sm;
+  outline: none;
+}
+
+.field input:focus,
+.field textarea:focus,
+.field select:focus {
+  border-color: var(--color-primary);
+}
+
+.field textarea {
+  resize: vertical;
+  min-height: 6rem;
+}
+
+.field select {
+  cursor: pointer;
+}
+
+.disabledSelect {
+  @apply opacity-50 cursor-not-allowed;
+}
+
+.errorMessage {
+  @apply text-sm text-error text-center;
+}
