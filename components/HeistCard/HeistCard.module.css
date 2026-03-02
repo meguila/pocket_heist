@@ -1,0 +1,65 @@
+@reference "../../app/globals.css";
+
+.card {
+  @apply bg-lighter rounded-lg p-4 flex flex-col gap-3;
+}
+
+.header {
+  @apply flex items-start justify-between gap-2;
+}
+
+.titleLink {
+  @apply no-underline flex-1;
+}
+
+.title {
+  @apply text-heading font-semibold m-0;
+  font-size: 0.825rem;
+  line-height: 1.4;
+  transition: color 0.15s ease;
+}
+
+.titleLink:hover .title {
+  @apply text-primary;
+}
+
+.clockIcon {
+  @apply text-body shrink-0;
+  margin-top: 2px;
+}
+
+.meta {
+  @apply flex flex-col gap-1;
+}
+
+.metaRow {
+  @apply flex items-center gap-1;
+}
+
+.metaIcon {
+  @apply text-body shrink-0;
+}
+
+.metaLabel {
+  @apply text-body;
+  font-size: 0.72rem;
+}
+
+.codename {
+  @apply text-secondary;
+  font-size: 0.72rem;
+}
+
+.timeRemaining {
+  @apply text-body m-0;
+  font-size: 0.72rem;
+}
+
+.dateRow {
+  @apply flex items-center gap-1;
+}
+
+.date {
+  @apply text-body;
+  font-size: 0.72rem;
+}
