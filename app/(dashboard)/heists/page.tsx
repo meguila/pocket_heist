@@ -11,6 +11,7 @@ const SKELETON_COUNT = 3
 export default function HeistsPage() {
   const { data: activeHeists, loading: activeLoading } = useHeists('active')
   const { data: assignedHeists, loading: assignedLoading } = useHeists('assigned')
+  const { data: expiredHeists, loading: expiredLoading } = useHeists('expired')
 
   return (
     <div className="page-content">
@@ -52,6 +53,25 @@ export default function HeistsPage() {
             <p className={styles.empty}>No heists assigned yet.</p>
             <Link href="/heists/create" className="btn">Create Heist</Link>
           </div>
+        )}
+      </section>
+
+      <section className={styles.section}>
+        <h2 className={styles.sectionTitle}>Expired Heists</h2>
+        {expiredLoading ? (
+          <div className={styles.gridSingle}>
+            {Array.from({ length: SKELETON_COUNT }).map((_, i) => (
+              <HeistCardSkeleton key={i} />
+            ))}
+          </div>
+        ) : expiredHeists.length > 0 ? (
+          <div className={styles.gridSingle}>
+            {expiredHeists.map((heist) => (
+              <HeistCard key={heist.id} heist={heist} />
+            ))}
+          </div>
+        ) : (
+          <p className={styles.empty}>No expired heists yet.</p>
         )}
       </section>
     </div>

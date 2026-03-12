@@ -27,6 +27,12 @@
   }
 }
 
+.gridSingle {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
 .empty {
   @apply text-body text-sm;
 }
