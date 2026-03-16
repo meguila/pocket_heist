@@ -1,0 +1,37 @@
+@reference "../../app/globals.css";
+
+.siteFooter {
+  @apply bg-light px-2 py-6 mt-auto;
+}
+
+.inner {
+  @apply mx-auto max-w-6xl flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between;
+}
+
+.brand {
+  @apply flex flex-col gap-1;
+}
+
+.appName {
+  @apply font-bold text-heading;
+}
+
+svg.logo {
+  display: inline-block;
+}
+
+.tagline {
+  @apply text-sm text-body;
+}
+
+.links {
+  @apply flex gap-6;
+}
+
+.links a {
+  @apply text-sm text-body transition-colors hover:text-primary;
+}
+
+.copyright {
+  @apply text-sm text-body;
+}
