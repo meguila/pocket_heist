@@ -50,6 +50,14 @@ svg.logo {
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
 }
 
+/* site layout — sticky footer */
+.site-layout {
+  @apply flex flex-col min-h-screen;
+}
+.site-layout main {
+  flex-grow: 1;
+}
+
 /* buttons */
 .btn {
   @apply px-6 py-2 rounded-md font-semibold text-sm bg-primary text-dark transition-opacity hover:opacity-80;

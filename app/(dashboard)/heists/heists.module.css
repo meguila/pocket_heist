@@ -1,0 +1,42 @@
+@reference "../../../app/globals.css";
+
+.section {
+  @apply flex flex-col gap-4 mb-10;
+}
+
+.sectionTitle {
+  @apply text-body font-normal m-0;
+  font-size: 0.8rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.gridSingle {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.empty {
+  @apply text-body text-sm;
+}
+
+.emptyState {
+  @apply flex flex-col gap-4 items-start;
+}

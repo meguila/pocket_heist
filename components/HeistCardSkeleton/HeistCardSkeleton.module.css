@@ -1,0 +1,60 @@
+@reference "../../app/globals.css";
+
+@keyframes shimmer {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+.card {
+  @apply bg-lighter rounded-lg p-4 flex flex-col gap-3;
+}
+
+.titleLine,
+.clockIcon,
+.metaRow,
+.timeLine,
+.dateLine {
+  background: linear-gradient(
+    90deg,
+    var(--color-lighter) 25%,
+    #1c2a3a 50%,
+    var(--color-lighter) 75%
+  );
+  background-size: 800px 100%;
+  animation: shimmer 1.6s infinite linear;
+  @apply rounded;
+}
+
+.header {
+  @apply flex items-center justify-between gap-2;
+}
+
+.titleLine {
+  height: 13px;
+  width: 70%;
+}
+
+.clockIcon {
+  height: 13px;
+  width: 13px;
+  @apply rounded-full shrink-0;
+}
+
+.meta {
+  @apply flex flex-col gap-1;
+}
+
+.metaRow {
+  height: 11px;
+  width: 55%;
+}
+
+.timeLine {
+  height: 11px;
+  width: 35%;
+}
+
+.dateLine {
+  height: 11px;
+  width: 45%;
+}

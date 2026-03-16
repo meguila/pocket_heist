@@ -4,6 +4,7 @@ import { useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { useUser } from "@/hooks/useUser"
 import Navbar from "@/components/Navbar"
+import Footer from "@/components/Footer"
 import PageLoader from "@/components/PageLoader"
 
 export default function DashboardLayout({
@@ -24,9 +25,10 @@ export default function DashboardLayout({
   }
 
   return (
-    <>
+    <div className="site-layout">
       <Navbar />
       <main>{children}</main>
-    </>
+      <Footer />
+    </div>
   )
 }

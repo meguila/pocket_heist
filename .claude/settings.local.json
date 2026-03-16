@@ -17,7 +17,12 @@
       "Bash(powershell.exe -NoProfile -Command \"Select-String -Path ''C:/Users/LENOVO/.claude.json'' -Pattern ''\"\"command\"\"'' -Context 0,0\")",
       "Bash(Select-String \"firebase\" -NotMatch)",
       "Bash(Select-Object -First 5)",
-      "mcp__context7__resolve-library-id"
+      "mcp__context7__resolve-library-id",
+      "mcp__figma__whoami",
+      "Bash(npm run:*)",
+      "mcp__figma__get_design_context",
+      "Bash(ls \"C:\\\\Develop\\\\01_Devs\\\\05_Sandbox\\\\pocket_heist\\\\app\\\\\\(dashboard\\)\\\\heists\" 2>/dev/null)",
+      "Bash(ls \"C:\\\\Develop\\\\01_Devs\\\\05_Sandbox\\\\pocket_heist\\\\app\\\\\\(dashboard\\)\\\\heists\\\\[id]\")"
     ]
   },
   "hooks": {
